@@ -12,14 +12,12 @@ canvas.height = window.innerHeight;
 // Get the canvas context for drawing
 const ctx = canvas.getContext('2d');
 
-
-
-
 // Variables to store the current drawing state
 let isDrawing = false;
 let currentLine = null;
 let currentAnchorPoint = null;
 let counter = 0;
+let scaleFactor = 1
 
 // Variables to store existing lines and anchor points
 const lines = [];
@@ -33,17 +31,11 @@ const ANCHOR_POINT_SNAP_DISTANCE = 10;
 canvas.addEventListener('mousedown', onMouseDown, false);
 canvas.addEventListener('mousemove', onMouseMove, false);
 canvas.addEventListener('mouseup', onMouseUp, false);
-
-
+canvas.addEventListener('mousemove', onMouseMove, false);
+canvas.addEventListener("wheel", mouseWheelEvent, {passive: false});
 
 
 // FUNCTIONS ****************************************************************
-
-
-
-// FUNCTION TO - See if a line is clicked
-
-
 
 
 // FUNCTION TO - Find the closest anchor point within a certain distance and return
@@ -232,13 +224,14 @@ function snapToAxis(x1, y1, x2, y2) {
 
 // FUNCTION TO - Get the relative position of the canvas to account for scrolling
 function getRelativePosition(event) {
-  const rect = canvas.getBoundingClientRect();
-  const x = event.pageX - rect.left - window.scrollX;
-  const y = event.pageY - rect.top - window.scrollY;
-  return { x, y };
+  const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+  const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+  const transformedX = (mouseX - ctx.getTransform().e) / scaleFactor;
+  const transformedY = (mouseY - ctx.getTransform().f) / scaleFactor;
+
+  return { x: transformedX, y: transformedY };
 }
-
-
 
 
 // FUNCTIONS FOR MOUSE OPERATIONS *******************************************
@@ -307,7 +300,27 @@ function onMouseMove(event) {
 }
 
 
-canvas.addEventListener('mousemove', onMouseMove, false);
+function mouseWheelEvent(event) {
+  event.preventDefault();
+  
+  const scaleAmount = 0.05;
+
+  const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+  const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+  if (event.deltaY < 0) {
+    scaleFactor += scaleAmount;
+  } else {
+    scaleFactor -= scaleAmount;
+  }
+
+  scaleFactor = Math.max(scaleFactor, 0.1);
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  ctx.setTransform(scaleFactor, 0, 0, scaleFactor, mouseX - mouseX * scaleFactor, mouseY - mouseY * scaleFactor);
+  drawExistingLinesAndAnchorPoints()
+}
 
 
 // FUNCTION FOR - MOUSE UP event
