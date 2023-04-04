@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fence Layout Application</title>
+    <link rel="stylesheet" href="styles.css">
+
+
+</head>
+<body>
+    <form id="fence-properties">
+        <label for="material">Material:</label>
+        <select id="material">
+            <option value="Twin Bar">Twin Bar</option>
+            <option value="Roll Form">Roll Form</option>
+        </select>
+        <label for="height">Height:</label>
+        <select id="height">
+            <option value="1.2">1.2 m</option>
+            <option value="2.0">2.0 m</option>
+            <option value="2.4">2.4 m</option>
+            <option value="3.0">3.0 m</option>
+            <option value="3.6">3.6 m</option>
+            <option value="4.0">4.0 m</option>
+            <option value="4.5">4.5 m</option>
+            <option value="5.0">5.0 m</option>
+            <option value="6.0">6.0 m</option>
+        </select>
+    </form>
+    <canvas id="canvas" width="1200" height="600"></canvas>
+
+
+    <table id="linesTable">
+        <thead>
+            <tr>
+            <th>Line Number</th>
+            <th>Material</th>
+            <th>Height</th>
+            <th>Length</th>
+            </tr>
+        </thead>
+        <tbody id="linesTableBody">
+        </tbody>
+        </table>
+        
+        <table id="anchorPointsTable">
+        <thead>
+            <tr>
+            <th>Anchor Point Number</th>
+            <th>Type</th>
+            <th>Height</th>
+            <th>Material</th>
+            </tr>
+        </thead>
+        <tbody id="anchorPointsTableBody">
+        </tbody>
+    </table>
+
+
+      
+
+    <script src="line.js"></script>
+    <script src="anchorPoint.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
